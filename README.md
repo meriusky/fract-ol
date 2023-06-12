@@ -1,2 +1,2 @@
-# so_long
-This project is a small 2D game. It is designed to make me work with textures and sprites and some other basic gameplay elements.
+# fracto'ol
+This project aims to create graphically fractals.
