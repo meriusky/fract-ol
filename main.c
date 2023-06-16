@@ -1,4 +1,6 @@
-#include <unistd.h>
+#include "ft_printf.h"
+#include "libft.h"
+#include "mlx.h"
 
 int	main(int argc, char *argv[])
 {
@@ -8,7 +10,7 @@ int	main(int argc, char *argv[])
 		return (0);
 	while(argv[1][count] != '\0')
 	{
-		write(1, &argv[1][count], 1);
+		ft_printf("%c", argv[1][count]);
 		count++;
 	}
 	return (0);

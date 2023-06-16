@@ -9,15 +9,16 @@ DEPS = $(SRCS:.c=.d)
 
 LIBFT = libft/libft.a
 PRINTF = printf/libftprintf.a
+LIBMLX = libmlx/libmlx.a
 
-CFLAGS = -Wall -Werror -Wextra -MMD -I libft -I printf
+CFLAGS = -Wall -Werror -Wextra -MMD -I libft -I printf -I libmlx
 
-LDFLAGS = -L libft -L printf -l ft -l ftprintf
+LDFLAGS = -L libft -L printf -l ft -l ftprintf -L libmlx -l mlx
 
 all: 
 	$(MAKE) $(NAME) 
 
-$(NAME): $(OBJS) $(LIBFT) $(PRINTF)
+$(NAME): $(OBJS) $(LIBFT) $(PRINTF) $(LIBMLX)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $(NAME)
 
 $(LIBFT):
@@ -26,6 +27,8 @@ $(LIBFT):
 $(PRINTF):
 	make -C printf
 
+$(LIBMLX):
+	make -C libmlx
 
 clean:
 	rm -rf $(OBJS)
