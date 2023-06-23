@@ -13,7 +13,7 @@ LIBMLX = libmlx/libmlx.a
 
 CFLAGS = -Wall -Werror -Wextra -MMD -I libft -I printf -I libmlx
 
-LDFLAGS = -L libft -L printf -l ft -l ftprintf -L libmlx -l mlx
+LDFLAGS = -L libft -L printf -l ft -l ftprintf -L libmlx -l mlx -framework OpenGL -framework AppKit
 
 all: 
 	$(MAKE) $(NAME) 

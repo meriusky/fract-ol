@@ -24,24 +24,16 @@ int	main(void)
 	void *mlx;
 	void *mlx_win;
 	t_data img;
+	int	i;
 
+	i = 5;
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, 1920, 1080, "hello");
 	img.img = mlx_new_image(mlx, 1920, 1080);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-	my_mlx_pixel_put(&img, 5, 5, 0x00FF0000);
+//	my_mlx_pixel_put(&img, 5, 5, 0x00FF0000);
+   	while (++i < 300)
+		my_mlx_pixel_put(&img, i, 5, 0x00FF0000);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
-
-//	mlx_loop(mlx);
-/*	int count = 0;
-
-	if (argc > 2)
-		return (0);
-	while(argv[1][count] != '\0')
-	{
-		ft_printf("%c", argv[1][count]);
-		count++;
-	}
-	return (0);*/
 }
