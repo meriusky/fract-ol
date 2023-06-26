@@ -37,6 +37,7 @@ clean:
 fclean: clean
 	$(MAKE) -C libft fclean
 	$(MAKE) -C printf fclean
+	$(MAKE) -C libmlx clean
 	rm -rf $(NAME)
 
 re: fclean all

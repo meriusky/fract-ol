@@ -19,7 +19,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-int	main(void)
+int	main(int argc, char *argv[])
 {
 	void *mlx;
 	void *mlx_win;
@@ -27,6 +27,11 @@ int	main(void)
 	int	i;
 
 	i = 5;
+	if(argc != 2 || ft_strncmp(argv[1], "do", 2) != 0)
+	{
+		ft_printf("you have to write do\n");
+		return(0);
+	}
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, 1920, 1080, "hello");
 	img.img = mlx_new_image(mlx, 1920, 1080);
