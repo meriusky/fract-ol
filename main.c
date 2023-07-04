@@ -33,50 +33,92 @@ int	hook_keyboard(int keycode, t_fract *f)//funcion que cierra con el esc y mas.
 	ft_printf("keycode: %d\n", keycode);
 	if (keycode == 53)//para cerrar con el esc
 		exit(0);
-	return (0);
-}
-int	mandelbrot(t_fract *f)
-{
-	long x;
-	long y;
-	long x0;
-	long y0;
-	long xtemp;
-	long iteration;
-	long max_iteration;
-	long color;
-	 
-	  x = 0;
-	  y = 0;
-	xtemp = 0;
-	iteration = 0;
-	max_iteration = 1000;
-	while (x < 1280)
-	 {
-		while(y < 940)
-		{
-			x0 =  (x / 1280) * 4.0 - 2.0;
-			y0 = (y / 940) * 4.0 - 2.0;
-		 	 while (x*x + y*y <= (2*2) && iteration < max_iteration)
-		  	{
-		    		xtemp = x*x - y*y + x0;
-		   		y = 2*x*y + y0;
-		  		x = xtemp;
-			 	iteration = iteration + 1;
-		  	}
-	  	if (iteration == max_iteration)
-	   	 	color = 0;
-	 	 else
-	   		color = iteration;
-		my_mlx_pixel_put(&f->img, x, y, color);
-		y++;
-		}
-	x++;
+	else if (keycode == 34)//zoom in por eso I que es 34
+	{
+		
 	}
-	mlx_put_image_to_window(f->mlx, f->mlx_win, f->img.img, 0, 0);
-	f->block = 1;
+	else if (keycode == 31)//zoom out por eso O que es 31
+	{
+
+	}
 	return (0);
 }
+int    loop_mandelbrot(float x0, float y0)//float es la manera en la que se declaran los numeros con decimales
+{
+    int        iteration;
+    int        max_iteration;
+    float    x;
+    float    y;
+    float    xtemp;
+    float    color;
+
+    x = 0.0;
+    y = 0.0;
+    iteration = 0;
+    max_iteration = 1000;
+    while (x*x + y*y <= (2*2) && iteration < max_iteration)
+    {
+        xtemp = x*x - y*y + x0;
+        y = 2*x*y + y0;
+        x = xtemp;
+        iteration = iteration + 1;
+    }
+    if (iteration == max_iteration)
+        color = 0x000000;
+    else
+        color = 0xFF0000;
+    return (color);
+}
+int    loop_julia(float x0, float y0)
+{
+    int        iteration;
+    int        max_iteration;
+    float    xtemp;
+    float    color;
+
+    iteration = 0;
+    max_iteration = 50;
+    while (x0*x0 + y0*y0 <= (2*2) && iteration < max_iteration)
+    {
+        xtemp = x0*x0 - y0*y0 + 0.285;
+        y0 = 2*x0*y0 - 0.01;
+        x0 = xtemp;
+        iteration = iteration + 1;
+    }
+    if (iteration == max_iteration)
+        color = 0x000000;
+    else
+        color = 0xFF0000;
+    return (color);
+}
+
+int    mandelbrot(t_fract *f)
+{
+    int        x;
+    int        y;
+    float    x0;
+    float    y0;
+    float    color;
+
+    x = 0;
+    while (x < 1280)
+    {
+        y = 0;
+        while (y < 940)
+        {
+            x0 =  ((float)x / 1280.0) * 4.0 - 2.0;
+            y0 = ((float)y / 940.0) * 3.0 - 1.5;
+            color = loop_mandelbrot(x0, y0);
+            my_mlx_pixel_put(&f->img, x, y, color);
+            y++;
+        }
+        x++;
+    }
+    mlx_put_image_to_window(f->mlx, f->mlx_win, f->img.img, 0, 0);
+    f->block = 1;
+    return (0);
+}
+
 
 int	loop_hook(t_fract *f)//mandelbrot
 {
