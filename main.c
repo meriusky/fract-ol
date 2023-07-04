@@ -17,6 +17,10 @@ typedef struct	s_fract // en las estructuras podemos meter otras estructuras y m
 	void	*mlx_win;
 	t_data	img;
 	int	block;
+	float	xmax;
+	float	ymax;
+	float	xmin;
+	float	ymin;
 }t_fract;
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -29,17 +33,26 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 
 int	hook_keyboard(int keycode, t_fract *f)//funcion que cierra con el esc y mas...
 {
-	(void)f;
+
 	ft_printf("keycode: %d\n", keycode);
 	if (keycode == 53)//para cerrar con el esc
 		exit(0);
 	else if (keycode == 34)//zoom in por eso I que es 34
 	{
-		
+		f->xmax = f->xmax - 0.05;
+		f->xmin = f->xmin + 0.05;
+		f->ymax = f->ymax - 0.05;
+		f->ymin = f->ymin + 0.05;
+		f->block = 0;
 	}
 	else if (keycode == 31)//zoom out por eso O que es 31
 	{
 
+		f->xmax = f->xmax + 0.05;
+		f->xmin = f->xmin - 0.05;
+		f->ymax = f->ymax + 0.05;
+		f->ymin = f->ymin - 0.05;
+		f->block = 0;
 	}
 	return (0);
 }
@@ -106,8 +119,8 @@ int    mandelbrot(t_fract *f)
         y = 0;
         while (y < 940)
         {
-            x0 =  ((float)x / 1280.0) * 4.0 - 2.0;
-            y0 = ((float)y / 940.0) * 3.0 - 1.5;
+            x0 =  ((float)x / 1280.0) * (f->xmax - f->xmin) + f->xmin;
+            y0 = ((float)y / 940.0) * (f->ymax - f->ymin) + f->ymin;
             color = loop_mandelbrot(x0, y0);
             my_mlx_pixel_put(&f->img, x, y, color);
             y++;
@@ -120,7 +133,7 @@ int    mandelbrot(t_fract *f)
 }
 
 
-int	loop_hook(t_fract *f)//mandelbrot
+int	loop_hook(t_fract *f)//funcion que se repite hasta el infinito hasta que el programa termina
 {
 	if (f->block == 0)
 		mandelbrot(f);
@@ -134,6 +147,10 @@ int	main(int argc, char *argv[])
 
 //	i = 5;
 	f.block = 0;
+	f.xmax = 2.0;
+	f.xmin = -2.0;
+	f.ymax = 1.5;
+	f.ymin = -1.5;
 	if(argc != 2 || ft_strncmp(argv[1], "do", 2) != 0)
 	{
 		ft_printf("you have to write do\n");
