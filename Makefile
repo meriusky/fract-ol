@@ -2,7 +2,7 @@ NAME = fractol
 
 CC = gcc
 
-SRCS = main.c
+SRCS = main.c color.c
 
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)

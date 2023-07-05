@@ -1,32 +1,5 @@
-#include "ft_printf.h"
-#include "libft.h"
-#include "mlx.h"
-#include <math.h>
-#include <stdio.h>
+#include "fractol.h"
 
-typedef struct	s_data
-{
-	void	*img;
-	char	*addr;
-	int	bits_per_pixel;
-	int	line_length;
-	int	endian;
-}t_data;
-
-typedef struct	s_fract // en las estructuras podemos meter otras estructuras y muchas variables. Para organizar y no tener problemas con la norminette.
-{
-	void	*mlx;
-	void	*mlx_win;
-	t_data	img;
-	int	block;
-	float	x_max;
-	float	y_max;
-	float	x_min;
-	float	y_min;
-	int	max_iteration;
-	float	zoom;
-
-}t_fract;
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -97,8 +70,7 @@ int    loop_mandelbrot(t_fract *f, float x0, float y0)//float es la manera en la
     float    x;
     float    y;
     float    xtemp;
-    float    color;
-
+    
     x = 0.0;
     y = 0.0;
     iteration = 0;
@@ -109,40 +81,31 @@ int    loop_mandelbrot(t_fract *f, float x0, float y0)//float es la manera en la
         x = xtemp;
         iteration = iteration + 1;
     }
-    if (iteration == f->max_iteration)
-        color = 0x000000;
-    else
-        color = 0xFF0000;
-    return (color);
+    return (iteration);
 }
 int    loop_julia(t_fract *f, float x0, float y0)
 {
     int        iteration;
     float    xtemp;
-    float    color;
 
     iteration = 0;
     while (x0*x0 + y0*y0 <= (2*2) && iteration < f->max_iteration)
     {
-        xtemp = x0*x0 - y0*y0 + 0.285;
-        y0 = 2*x0*y0 - 0.01;
+        xtemp = x0*x0 - y0*y0 + f->r_julia;
+        y0 = 2*x0*y0 + f->i_julia;
         x0 = xtemp;
         iteration = iteration + 1;
     }
-    if (iteration == f->max_iteration)
-        color = 0x000000;
-    else
-        color = 0xFF0000;
-    return (color);
+    return (iteration);
 }
 
-int    mandelbrot(t_fract *f)//CAMBIAR NOMBREEEEE
+int    load_image(t_fract *f)//CAMBIAR NOMBREEEEE
 {
     int        x;
     int        y;
+    int		iteration;
     float    x0;
     float    y0;
-    float    color;
 
     x = 0;
     f->max_iteration = 50 * log10(f->zoom + 10);
@@ -154,8 +117,8 @@ int    mandelbrot(t_fract *f)//CAMBIAR NOMBREEEEE
         {
             x0 =  ((float)x / 1280.0) * (f->x_max - f->x_min) + f->x_min;
             y0 = ((float)y / 940.0) * (f->y_max - f->y_min) + f->y_min;
-            color = loop_mandelbrot(f, x0, y0);
-            my_mlx_pixel_put(&f->img, x, y, color);
+            iteration = loop_mandelbrot(f, x0, y0);//o mandelbrot o julia
+	    color_grad(f, iteration, x, y);
             y++;
         }
         x++;
@@ -169,7 +132,7 @@ int    mandelbrot(t_fract *f)//CAMBIAR NOMBREEEEE
 int	loop_hook(t_fract *f)//funcion que se repite hasta el infinito hasta que el programa termina
 {
 	if (f->block == 0)
-		mandelbrot(f);
+		load_image(f);
 	return (0);
 }
 
@@ -185,6 +148,8 @@ int	main(int argc, char *argv[])
 	f.y_max = 1.5;
 	f.y_min = -1.5;
 	f.zoom = 1.0;
+	f.i_julia = -0.01;
+	f.r_julia = 0.285;
 	if(argc != 2 || ft_strncmp(argv[1], "do", 2) != 0)
 	{
 		ft_printf("you have to write do\n");
@@ -198,7 +163,7 @@ int	main(int argc, char *argv[])
 //		my_mlx_pixel_put(&f.img, i, 5, 0x00FF0000);
 //	mlx_put_image_to_window(f.mlx, f.mlx_win, f.img.img, 0, 0);
 //aqui se debe crear los hooks (funcion para hacer lo del esc y que se cierre, o en verdad cualquier cosa con el raton o las teclas y que haga algo para hacer lo del esc y que se cierre, o en verdad cualquier cosa con el raton o las teclas y que haga algo))
-	mandelbrot(&f);
+	load_image(&f);
 	mlx_key_hook(f.mlx_win, hook_keyboard, &f);
 	mlx_loop_hook(f.mlx, loop_hook, &f);
 	mlx_loop(f.mlx);//funcion que hace correr infinitamente la imagen
