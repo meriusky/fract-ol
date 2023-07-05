@@ -1,6 +1,8 @@
 #include "ft_printf.h"
 #include "libft.h"
 #include "mlx.h"
+#include <math.h>
+#include <stdio.h>
 
 typedef struct	s_data
 {
@@ -17,10 +19,13 @@ typedef struct	s_fract // en las estructuras podemos meter otras estructuras y m
 	void	*mlx_win;
 	t_data	img;
 	int	block;
-	float	xmax;
-	float	ymax;
-	float	xmin;
-	float	ymin;
+	float	x_max;
+	float	y_max;
+	float	x_min;
+	float	y_min;
+	int	max_iteration;
+	float	zoom;
+
 }t_fract;
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -33,33 +38,62 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 
 int	hook_keyboard(int keycode, t_fract *f)//funcion que cierra con el esc y mas...
 {
+	float	x_percent;
+	float	y_percent;
 
+	x_percent = (f->x_max - f->x_min) / 100 * 2;
+	y_percent = (f->y_max - f->y_min) / 100 * 2;
 	ft_printf("keycode: %d\n", keycode);
 	if (keycode == 53)//para cerrar con el esc
 		exit(0);
-	else if (keycode == 34)//zoom in por eso I que es 34
+	else if (keycode == 34)//zoom in por eso I que es 34 (cambiar a rueda del raton)
 	{
-		f->xmax = f->xmax - 0.05;
-		f->xmin = f->xmin + 0.05;
-		f->ymax = f->ymax - 0.05;
-		f->ymin = f->ymin + 0.05;
+		f->x_max = f->x_max - x_percent;
+		f->x_min = f->x_min + x_percent;
+		f->y_max = f->y_max - y_percent;
+		f->y_min = f->y_min + y_percent;
 		f->block = 0;
+		f->zoom = f->zoom * 1.25;
 	}
 	else if (keycode == 31)//zoom out por eso O que es 31
 	{
 
-		f->xmax = f->xmax + 0.05;
-		f->xmin = f->xmin - 0.05;
-		f->ymax = f->ymax + 0.05;
-		f->ymin = f->ymin - 0.05;
+		f->x_max = f->x_max + x_percent;
+		f->x_min = f->x_min - x_percent;
+		f->y_max = f->y_max + y_percent;
+		f->y_min = f->y_min - y_percent;
+		f->block = 0;
+		f->zoom = f->zoom / 1.25;
+	}
+	else if (keycode == 126)//arriba
+	{
+		f->y_max = f->y_max - y_percent;
+		f->y_min = f->y_min - y_percent;
+		f->block = 0;
+	}
+	else if (keycode == 125)//abajo
+	{
+		f->y_max = f->y_max + y_percent;
+		f->y_min = f->y_min + y_percent;
+		f->block = 0;
+	}
+	else if (keycode == 124)//derecha
+	{
+		f->x_max = f->x_max + x_percent;
+		f->x_min = f->x_min + x_percent;
+		f->block = 0;
+	}
+	else if (keycode == 123)//izquierda
+	{
+		f->x_max = f->x_max - x_percent;
+		f->x_min = f->x_min - x_percent;
 		f->block = 0;
 	}
 	return (0);
 }
-int    loop_mandelbrot(float x0, float y0)//float es la manera en la que se declaran los numeros con decimales
+int    loop_mandelbrot(t_fract *f, float x0, float y0)//float es la manera en la que se declaran los numeros con decimales
 {
     int        iteration;
-    int        max_iteration;
     float    x;
     float    y;
     float    xtemp;
@@ -68,44 +102,41 @@ int    loop_mandelbrot(float x0, float y0)//float es la manera en la que se decl
     x = 0.0;
     y = 0.0;
     iteration = 0;
-    max_iteration = 1000;
-    while (x*x + y*y <= (2*2) && iteration < max_iteration)
+    while (x*x + y*y <= (2*2) && iteration < f->max_iteration)
     {
         xtemp = x*x - y*y + x0;
         y = 2*x*y + y0;
         x = xtemp;
         iteration = iteration + 1;
     }
-    if (iteration == max_iteration)
+    if (iteration == f->max_iteration)
         color = 0x000000;
     else
         color = 0xFF0000;
     return (color);
 }
-int    loop_julia(float x0, float y0)
+int    loop_julia(t_fract *f, float x0, float y0)
 {
     int        iteration;
-    int        max_iteration;
     float    xtemp;
     float    color;
 
     iteration = 0;
-    max_iteration = 50;
-    while (x0*x0 + y0*y0 <= (2*2) && iteration < max_iteration)
+    while (x0*x0 + y0*y0 <= (2*2) && iteration < f->max_iteration)
     {
         xtemp = x0*x0 - y0*y0 + 0.285;
         y0 = 2*x0*y0 - 0.01;
         x0 = xtemp;
         iteration = iteration + 1;
     }
-    if (iteration == max_iteration)
+    if (iteration == f->max_iteration)
         color = 0x000000;
     else
         color = 0xFF0000;
     return (color);
 }
 
-int    mandelbrot(t_fract *f)
+int    mandelbrot(t_fract *f)//CAMBIAR NOMBREEEEE
 {
     int        x;
     int        y;
@@ -114,14 +145,16 @@ int    mandelbrot(t_fract *f)
     float    color;
 
     x = 0;
+    f->max_iteration = 50 * log10(f->zoom + 10);
+    printf("%d\n",f->max_iteration);
     while (x < 1280)
     {
         y = 0;
         while (y < 940)
         {
-            x0 =  ((float)x / 1280.0) * (f->xmax - f->xmin) + f->xmin;
-            y0 = ((float)y / 940.0) * (f->ymax - f->ymin) + f->ymin;
-            color = loop_mandelbrot(x0, y0);
+            x0 =  ((float)x / 1280.0) * (f->x_max - f->x_min) + f->x_min;
+            y0 = ((float)y / 940.0) * (f->y_max - f->y_min) + f->y_min;
+            color = loop_mandelbrot(f, x0, y0);
             my_mlx_pixel_put(&f->img, x, y, color);
             y++;
         }
@@ -147,10 +180,11 @@ int	main(int argc, char *argv[])
 
 //	i = 5;
 	f.block = 0;
-	f.xmax = 2.0;
-	f.xmin = -2.0;
-	f.ymax = 1.5;
-	f.ymin = -1.5;
+	f.x_max = 2.0;
+	f.x_min = -2.0;
+	f.y_max = 1.5;
+	f.y_min = -1.5;
+	f.zoom = 1.0;
 	if(argc != 2 || ft_strncmp(argv[1], "do", 2) != 0)
 	{
 		ft_printf("you have to write do\n");
