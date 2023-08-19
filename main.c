@@ -162,7 +162,7 @@ int	main(int argc, char *argv[])
 //   	while (++i < 300)
 //		my_mlx_pixel_put(&f.img, i, 5, 0x00FF0000);
 //	mlx_put_image_to_window(f.mlx, f.mlx_win, f.img.img, 0, 0);
-//aqui se debe crear los hooks (funcion para hacer lo del esc y que se cierre, o en verdad cualquier cosa con el raton o las teclas y que haga algo para hacer lo del esc y que se cierre, o en verdad cualquier cosa con el raton o las teclas y que haga algo))
+//aqui se debe crear los hooks (funcion para hacer lo del esc y que se cierre, o en verdad cualquier cosa con el raton o las teclas)
 	load_image(&f);
 	mlx_key_hook(f.mlx_win, hook_keyboard, &f);
 	mlx_loop_hook(f.mlx, loop_hook, &f);
