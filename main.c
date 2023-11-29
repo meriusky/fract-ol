@@ -9,35 +9,46 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-int	hook_keyboard(int keycode, t_fract *f)//funcion que cierra con el esc y mas...
+int	hook_mouse(int keycode, int x, int y, t_fract *f)
 {
 	float	x_percent;
 	float	y_percent;
 
+	x = 0;
+	y = 0;
 	x_percent = (f->x_max - f->x_min) / 100 * 2;
 	y_percent = (f->y_max - f->y_min) / 100 * 2;
-	ft_printf("keycode: %d\n", keycode);
-	if (keycode == 53)//para cerrar con el esc
-		exit(0);
-	else if (keycode == 34)//zoom in por eso I que es 34 (cambiar a rueda del raton)
+	f->block = 0;
+	if (keycode == 4)//zoom in por eso I que es 34 (cambiar a rueda del raton)
 	{
 		f->x_max = f->x_max - x_percent;
 		f->x_min = f->x_min + x_percent;
 		f->y_max = f->y_max - y_percent;
 		f->y_min = f->y_min + y_percent;
-		f->block = 0;
 		f->zoom = f->zoom * 1.25;
 	}
-	else if (keycode == 31)//zoom out por eso O que es 31
+	else if (keycode == 5)//zoom out por eso O que es 31
 	{
-
 		f->x_max = f->x_max + x_percent;
 		f->x_min = f->x_min - x_percent;
 		f->y_max = f->y_max + y_percent;
 		f->y_min = f->y_min - y_percent;
-		f->block = 0;
 		f->zoom = f->zoom / 1.25;
 	}
+	return (0);
+}
+
+int	hook_keyboard(int keycode, t_fract *f)//funcion que cierra con el esc y mas...
+{
+	float	x_percent;
+	float	y_percent;
+
+	f->block = 0;
+	x_percent = (f->x_max - f->x_min) / 100 * 2;
+	y_percent = (f->y_max - f->y_min) / 100 * 2;
+	ft_printf("keycode: %d\t%p\n", keycode, f);
+	if (keycode == 53)//para cerrar con el esc
+		exit(0);
 	else if (keycode == 126)//arriba
 	{
 		f->y_max = f->y_max - y_percent;
@@ -64,25 +75,27 @@ int	hook_keyboard(int keycode, t_fract *f)//funcion que cierra con el esc y mas.
 	}
 	return (0);
 }
+
 int    loop_mandelbrot(t_fract *f, float x0, float y0)//float es la manera en la que se declaran los numeros con decimales
 {
     int        iteration;
     float    x;
     float    y;
     float    xtemp;
-    
-    x = 0.0;
-    y = 0.0;
+	
+	x = 0.0;
+	y = 0.0;
     iteration = 0;
     while (x*x + y*y <= (2*2) && iteration < f->max_iteration)
     {
-        xtemp = x*x - y*y + x0;
-        y = 2*x*y + y0;
-        x = xtemp;
-        iteration = iteration + 1;
+		xtemp = x*x - y*y + x0;
+		y = 2*x*y + y0;
+		x = xtemp;
+		iteration = iteration + 1;
     }
     return (iteration);
 }
+
 int    loop_julia(t_fract *f, float x0, float y0)
 {
     int        iteration;
@@ -118,7 +131,7 @@ int    load_image(t_fract *f)//CAMBIAR NOMBREEEEE
             x0 =  ((float)x / 1280.0) * (f->x_max - f->x_min) + f->x_min;
             y0 = ((float)y / 940.0) * (f->y_max - f->y_min) + f->y_min;
             iteration = loop_mandelbrot(f, x0, y0);//o mandelbrot o julia
-	    color_grad(f, iteration, x, y);
+			color_grad(f, iteration, x, y);
             y++;
         }
         x++;
@@ -127,7 +140,6 @@ int    load_image(t_fract *f)//CAMBIAR NOMBREEEEE
     f->block = 1;
     return (0);
 }
-
 
 int	loop_hook(t_fract *f)//funcion que se repite hasta el infinito hasta que el programa termina
 {
@@ -156,7 +168,7 @@ int	main(int argc, char *argv[])
 		return(0);
 	}
 	f.mlx = mlx_init();
-	f.mlx_win = mlx_new_window(f.mlx, 1280, 940, "hello");
+	f.mlx_win = mlx_new_window(f.mlx, 1280, 940, "fractol");
 	f.img.img = mlx_new_image(f.mlx, 1280, 940);
 	f.img.addr = mlx_get_data_addr(f.img.img, &f.img.bits_per_pixel, &f.img.line_length, &f.img.endian);
 //   	while (++i < 300)
@@ -165,6 +177,7 @@ int	main(int argc, char *argv[])
 //aqui se debe crear los hooks (funcion para hacer lo del esc y que se cierre, o en verdad cualquier cosa con el raton o las teclas)
 	load_image(&f);
 	mlx_key_hook(f.mlx_win, hook_keyboard, &f);
+	mlx_mouse_hook(f.mlx_win, hook_mouse, &f);//lo del raton
 	mlx_loop_hook(f.mlx, loop_hook, &f);
 	mlx_loop(f.mlx);//funcion que hace correr infinitamente la imagen
 }
