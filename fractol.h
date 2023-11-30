@@ -28,6 +28,7 @@ typedef struct	s_fract // en las estructuras podemos meter otras estructuras y m
 	float	zoom;
 	float	i_julia;
 	float	r_julia;
+	int	parameter;
 
 }t_fract;
 

@@ -130,7 +130,11 @@ int    load_image(t_fract *f)//CAMBIAR NOMBREEEEE
         {
             x0 =  ((float)x / 1280.0) * (f->x_max - f->x_min) + f->x_min;
             y0 = ((float)y / 940.0) * (f->y_max - f->y_min) + f->y_min;
-            iteration = loop_mandelbrot(f, x0, y0);//o mandelbrot o julia
+//			if (par == 1)
+				 iteration = loop_mandelbrot(f, x0, y0);	
+//			else
+//				iteration = loop_julia(f, x0, y0);
+           // iteration = loop_mandelbrot(f, x0, y0);//o mandelbrot o julia
 			color_grad(f, iteration, x, y);
             y++;
         }
@@ -162,11 +166,14 @@ int	main(int argc, char *argv[])
 	f.zoom = 1.0;
 	f.i_julia = -0.01;
 	f.r_julia = 0.285;
-	if(argc != 2 || ft_strncmp(argv[1], "do", 2) != 0)
+	if(argc != 2 || (ft_strncmp(argv[1], "mandelbrot", 10) != 0 && ft_strncmp(argv[1], "julia", 5) != 0) && (ft_strlen(argv[1]) != 11 || ft_strlen(argv[1]) != 7)) 
 	{
-		ft_printf("you have to write do\n");
+		//if(ft_strlen(argv[1]) != 10 || ft_strlen(argv[1]) != 6)
+			ft_printf("Just two options available: madelbrot or julia\n");
 		return(0);
 	}
+	if (ft_strncmp(argv[1], "mandelbrot", 10) == 0)
+		f.parameter = 1;
 	f.mlx = mlx_init();
 	f.mlx_win = mlx_new_window(f.mlx, 1280, 940, "fractol");
 	f.img.img = mlx_new_image(f.mlx, 1280, 940);
