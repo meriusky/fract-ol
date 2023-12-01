@@ -131,9 +131,9 @@ int    load_image(t_fract *f)//CAMBIAR NOMBREEEEE
             x0 =  ((float)x / 1280.0) * (f->x_max - f->x_min) + f->x_min;
             y0 = ((float)y / 940.0) * (f->y_max - f->y_min) + f->y_min;
 			if (f->parameter == 1)
-				 iteration = loop_mandelbrot(f, x0, y0);	
+				 iteration = loop_mandelbrot(f, x0, y0);
 			else
-				iteration = loop_julia(f, ft_atoi(argv[2]), ft_atoi(argv[3]));
+				iteration = loop_julia(f, x0, y0);
            // iteration = loop_mandelbrot(f, x0, y0);//o mandelbrot o julia
 			color_grad(f, iteration, x, y);
             y++;
@@ -164,14 +164,18 @@ int	main(int argc, char *argv[])
 	f.y_max = 1.5;
 	f.y_min = -1.5;
 	f.zoom = 1.0;
-	f.i_julia = ft_atoi(argv[2]);//-0.01; //hay que convertirlo en un float
-	f.r_julia = ft_atoi(argv[3]);//0.285;
 	if((argc != 2 || (ft_strncmp(argv[1], "mandelbrot", 11) != 0)) || (argc != 4 || ft_strncmp(argv[1], "julia", 6) != 0))
 	{
 		//if(ft_strlen(argv[1]) != 10 || ft_strlen(argv[1]) != 6)
 		ft_printf("Just two options available: madelbrot or julia\n");
 		return(0);
 	}
+	if (ft_atof(argv[2], &f.r_julia) || ft_atof(argv[3], &f.i_julia)) //0.0285, -0.01; //hay que convertirlo en un float
+	{
+		ft_printf("Arguments are not numbers\n");
+		return (0);
+	}
+	printf("Real: %f\tIm: %f\n", f.r_julia, f.i_julia);
 	f.parameter = 0;
 	if (ft_strncmp(argv[1], "mandelbrot", 11) == 0)
 		f.parameter = 1;

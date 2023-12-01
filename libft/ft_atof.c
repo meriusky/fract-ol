@@ -6,25 +6,23 @@
 /*   By: mehernan <mehernan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 21:45:24 by mehernan          #+#    #+#             */
-/*   Updated: 2023/11/30 17:11:50 by mehernan         ###   ########.fr       */
+/*   Updated: 2023/12/01 13:41:43 by mehernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atof(const char *str, double *value)
+int	ft_atof(const char *str, float *value)
 {
-	int		sign = 1;
-	double	multiplier = 0.1;
-	double	result = 0.0;
-	double	fraction = 0.0;
+	float	sign = 1.00;
+	float	multiplier = 0.1;
+	float	result = 0.0;
+	float	fraction = 0.0;
 	
 	if (*str == '-' || *str == '+')
 	{
 		if (*str++ == '-')
-			sign = -1;
-		else
-			sign = 1;
+			sign = -1.00;
 	}
 	if (!ft_isdigit(*str))
 		 return (1);
@@ -40,8 +38,13 @@ int	ft_atof(const char *str, double *value)
 	}
 	if (*str != '\0')
 		return (1);
-	if (sign == -1)
-		result *= sign;
+	if (sign == -1.00)
+	{
+		if (result == 0.00)
+			fraction *= sign;
+		else
+			result *= sign;
+	}
 	*value = result + fraction;
 	return (0);
 }
