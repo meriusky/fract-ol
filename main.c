@@ -14,8 +14,8 @@ int	hook_mouse(int keycode, int x, int y, t_fract *f)
 	float	x_percent;
 	float	y_percent;
 
-	x = 0;
-	y = 0;
+	(void)x;
+	(void)y;
 	x_percent = (f->x_max - f->x_min) / 100 * 2;
 	y_percent = (f->y_max - f->y_min) / 100 * 2;
 	f->block = 0;
