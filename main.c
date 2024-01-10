@@ -164,13 +164,17 @@ int	main(int argc, char *argv[])
 	f.y_max = 1.5;
 	f.y_min = -1.5;
 	f.zoom = 1.0;
-	if((argc != 2 || (ft_strncmp(argv[1], "mandelbrot", 11) != 0)) || (argc != 4 || ft_strncmp(argv[1], "julia", 6) != 0))
+	f.r_julia = 0.285;
+	f.i_julia = -0.01;
+	printf("Real: %f\tIm: %f\n", f.r_julia, f.i_julia);
+	if ((argc == 2 && ft_strncmp(argv[1], "mandelbrot", 11) != 0 && ft_strncmp(argv[1], "julia", 6) != 0)
+		|| (argc == 4 && ft_strncmp(argv[1], "julia", 6) != 0) || (argc != 2 && argc != 4))
 	{
-		//if(ft_strlen(argv[1]) != 10 || ft_strlen(argv[1]) != 6)
-		ft_printf("Just two options available: madelbrot or julia\n");
+		ft_printf("Just two options available: mandelbrot or julia\n");
 		return(0);
 	}
-	if (ft_atof(argv[2], &f.r_julia) || ft_atof(argv[3], &f.i_julia)) //0.0285, -0.01; //hay que convertirlo en un float
+	printf("Real: %f\tIm: %f\n", f.r_julia, f.i_julia);
+	if(argc == 4 && (ft_atof(argv[2], &f.r_julia) || ft_atof(argv[3], &f.i_julia))) //0.0285, -0.01; //hay que convertirlo en un float
 	{
 		ft_printf("Arguments are not numbers\n");
 		return (0);

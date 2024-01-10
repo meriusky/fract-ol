@@ -18,7 +18,7 @@ LDFLAGS = -L libft -L printf -l ft -l ftprintf -L libmlx -l mlx -framework OpenG
 all: 
 	$(MAKE) $(NAME) 
 
-$(NAME): $(OBJS) $(LIBFT) $(PRINTF) $(LIBMLX)
+$(NAME): $(LIBFT) $(PRINTF) $(LIBMLX) $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $(NAME)
 
 $(LIBFT):
