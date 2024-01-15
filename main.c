@@ -6,7 +6,7 @@
 /*   By: mehernan <mehernan@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:00:30 by mehernan          #+#    #+#             */
-/*   Updated: 2024/01/15 20:39:51 by mehernan         ###   ########.fr       */
+/*   Updated: 2024/01/15 21:41:18 by mehernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	check_arguments(int argc, char **argv, t_fract *f)
 		return (warning(1));
 	if (argc == 4 && (ft_atof(argv[2], &f->r_julia)
 			|| ft_atof(argv[3], &f->i_julia)))
-		return (warning(1));
+		return (warning(3));
 	f->parameter = 0;
 	if (ft_strncmp(argv[1], "mandelbrot", 11) == 0)
 		f->parameter = 1;

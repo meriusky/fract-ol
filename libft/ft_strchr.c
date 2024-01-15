@@ -6,7 +6,7 @@
 /*   By: mehernan <mehernan@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 20:22:38 by mehernan          #+#    #+#             */
-/*   Updated: 2022/05/22 20:46:38 by mehernan         ###   ########.fr       */
+/*   Updated: 2024/01/15 21:38:54 by mehernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,4 @@ char	*ft_strchr(const char *s, int c)
 	else if (c == '\0')
 		return ((char *)&s[count]);
 	return (NULL);
-}	
+}

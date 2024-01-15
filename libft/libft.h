@@ -6,7 +6,7 @@
 /*   By: mehernan <mehernan@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 17:41:40 by mehernan          #+#    #+#             */
-/*   Updated: 2023/12/01 13:46:06 by mehernan         ###   ########.fr       */
+/*   Updated: 2024/01/15 21:39:07 by mehernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
-int	   	ft_atof(const char *str, float *value);
+int		ft_atof(char *str, float *value);
 
 #endif

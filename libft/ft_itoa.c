@@ -6,7 +6,7 @@
 /*   By: mehernan <mehernan@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 17:56:38 by mehernan          #+#    #+#             */
-/*   Updated: 2022/06/22 11:07:01 by mehernan         ###   ########.fr       */
+/*   Updated: 2024/01/15 21:38:14 by mehernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	calcular_numero_de_digitos(int n)
 
 	num_dig = 0;
 	if (n < 0)
-	num_dig++;
+		num_dig++;
 	while (n != 0)
 	{
 		n = n / 10;

@@ -6,14 +6,14 @@
 /*   By: mehernan <mehernan@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/23 20:21:26 by mehernan          #+#    #+#             */
-/*   Updated: 2022/07/26 19:03:41 by mehernan         ###   ########.fr       */
+/*   Updated: 2024/01/15 21:38:30 by mehernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 void	ft_lstadd_back(t_list **lst, t_list *new)
-{	
+{
 	t_list	*sad;
 
 	if (new == NULL)

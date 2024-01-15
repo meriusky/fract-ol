@@ -6,7 +6,7 @@
 /*   By: mehernan <mehernan@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 17:33:06 by mehernan          #+#    #+#             */
-/*   Updated: 2022/11/27 19:54:56 by mehernan         ###   ########.fr       */
+/*   Updated: 2024/01/15 21:38:41 by mehernan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_mem_case_error(char **result, int i)
 		count++;
 	}
 	free(result);
-}	
+}
 
 char	**construct_result(char **result, char const *s, char c)
 {
